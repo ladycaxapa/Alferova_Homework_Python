@@ -1,35 +1,38 @@
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 
 def test_form_submission():
-    # Инициализируем драйвер браузера Chrome
+
     driver = webdriver.Chrome()
 
     try:
-        # Задаем исходный URL формы
-        start_url = "https://qa-territory.online"
+        # Шаг 1: Открываем страницу
+        start_url = "https://httpbin.qa-territory.online/forms/post"
         driver.get(start_url)
 
-        # 1. Находим поле ввода по атрибуту name="custname"
+        # Шаг 2: Находим поле ввода с названием custname
         name_input = driver.find_element(By.NAME, "custname")
 
-        # 2. Вводим имя в поле
-        name_input.send_keys("Ваше Имя")
+        # Шаг 3: Вводим в него имя
+        name_input.send_keys("Алена")
 
-        # 3. Находим кнопку Submit с помощью XPath по тексту и кликаем
-        # Используем встроенную функцию text()
-        submit_xpath = "//button[text()='Submit order']"
-        submit_button = driver.find_element(By.XPATH, submit_xpath)
+        # Шаг 4: Находим кнопку Submit и нажимаем на неё
+        submit_button = driver.find_element(
+            By.XPATH,
+            "//button[text()='Submit order']"
+        )
         submit_button.click()
 
-        # 4. Проверяем, что после нажатия текущий URL изменился
-        current_url = driver.current_url
-        assert current_url != start_url, (
+        time.sleep(2)
+
+        # Шаг 5: Проверяем, что после нажатия URL изменился
+        assert driver.current_url != start_url, (
             f"Ошибка: URL не изменился после отправки формы "
-            f"и остался: {current_url}"
+            f"и остался прежним: {driver.current_url}"
         )
 
     finally:
-        # Гарантированно закрываем браузер после выполнения теста
+
         driver.quit()
