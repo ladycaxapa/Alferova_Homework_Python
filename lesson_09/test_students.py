@@ -1,10 +1,12 @@
+import os
 import pytest
 from sqlalchemy import create_engine, text
 
 
-DATABASE_URL = (
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
     "postgresql+psycopg2://"
-    "postgres:123456789"
+    "postgres:password"
     "@localhost:5432/sql_praktika"
 )
 
